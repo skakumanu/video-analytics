@@ -1,71 +1,34 @@
-# ~/video-analytics/Dockerfile
+FROM ubuntu:latest
 
-FROM python:3.9
-
-LABEL mantainer="Josip Janzic <josip@jjanzic.com>"
-
-WORKDIR /opt/build
-
-ENV OPENCV_VERSION="4.5.1"
-
-RUN apt-get -qq update \
-    && apt-get -qq install -y --no-install-recommends \
-        build-essential \
-        cmake \
-        git \
-        wget \
-        unzip \
-        yasm \
-        pkg-config \
-        libswscale-dev \
-        libtbb2 \
-        libtbb-dev \
-        libjpeg-dev \
-        libpng-dev \
-        libtiff-dev \
-        libopenjp2-7-dev \
-        libavformat-dev \
-        libpq-dev \
-    && pip install numpy \
-    && wget -q https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip -O opencv.zip \
-    && unzip -qq opencv.zip -d /opt \
-    && rm -rf opencv.zip \
-    && cmake \
-        -D BUILD_TIFF=ON \
-        -D BUILD_opencv_java=OFF \
-        -D WITH_CUDA=OFF \
-        -D WITH_OPENGL=ON \
-        -D WITH_OPENCL=ON \
-        -D WITH_IPP=ON \
-        -D WITH_TBB=ON \
-        -D WITH_EIGEN=ON \
-        -D WITH_V4L=ON \
-        -D BUILD_TESTS=OFF \
-        -D BUILD_PERF_TESTS=OFF \
-        -D CMAKE_BUILD_TYPE=RELEASE \
-        -D CMAKE_INSTALL_PREFIX=$(python3.9 -c "import sys; print(sys.prefix)") \
-        -D PYTHON_EXECUTABLE=$(which python3.9) \
-        -D PYTHON_INCLUDE_DIR=$(python3.9 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
-        -D PYTHON_PACKAGES_PATH=$(python3.9 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") \
-        /opt/opencv-${OPENCV_VERSION} \
-    && make -j$(nproc) \
-    && make install \
-    && rm -rf /opt/build/* \
-    && rm -rf /opt/opencv-${OPENCV_VERSION} \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get -qq autoremove \
-    && apt-get -qq clean
-
+# Install linux packages
+RUN apt update
 RUN apt-get update
-RUN apt install -y libgl1-mesa-glx
+RUN apt-get install -y libglib2.0-0 libsm6 libxrender1 libxext6
 
-WORKDIR /app
-COPY . /app
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt install -y tzdata
+RUN apt install -y python3-pip git zip htop screen libgl1-mesa-glx libglib2.0-0
+RUN alias python=python3
 
-RUN pip install --upgrade pip
-RUN pip --no-cache-dir install --upgrade opencv-python
-RUN pip --no-cache-dir install jupyter notebook
+# Install python dependencies
+COPY yolov5/requirements.txt .
+RUN python3 -m pip install --upgrade pip
+RUN pip install --no-cache -r requirements.txt albumentations gsutil notebook \
+    coremltools onnx onnx-simplifier onnxruntime openvino-dev tensorflow-cpu tensorflowjs \
+    torch==1.11.0+cpu torchvision==0.12.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
 
-EXPOSE 8888
+# Create working directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-CMD ["jupyter", "notebook", "--ip='*'", "--port=8888", "--no-browser", "--allow-root"]
+# Copy contents
+RUN git clone https://github.com/ultralytics/yolov5 /usr/src/app
+# COPY . /usr/src/app
+
+# Downloads to user config dir
+ADD https://ultralytics.com/assets/Arial.ttf /root/.config/Ultralytics/
+
+# Build and Push
+# t=ultralytics/yolov5:latest-cpu && sudo docker build -t $t . && sudo docker push $t
+
+# Pull and Run
+# t=ultralytics/yolov5:latest-cpu && sudo docker pull $t && sudo docker run -it --ipc=host $t
