@@ -7,6 +7,15 @@ To build a dockerize production ready computer vision based YoloV5 object detect
 
 Yolo V5 is a family of object detection architectures and models pretrained on the COCO dataset, and represents Ultralytics open-source research into future vision AI methods, incorporating lessons learned and best practices evolved over thousands of hours of research and development
 
+## Local Setup
+Python [Data science](https://towardsdatascience.com/setup-an-environment-for-machine-learning-and-deep-learning-with-anaconda-in-windows-5d7134a3db10) environment setup locally
+
+## Run Locally Jupyter notebook
+```sh
+$ jupyter notebook
+
+Open the notebook - yolov5videoanalytics.ipynb
+```
 
 ## Docker
 ```sh
@@ -33,7 +42,9 @@ $ apt-get install -y libglib2.0-0 libsm6 libxrender1 libxext6
 ```
 Thank you to my UCSD ML coursework mentor, Zuraiz Uddin for his support and guidance in completing the Capstone project. It has been an amazing journey!
 
-## Data
+## References and Data
+* Python [Data science](https://towardsdatascience.com/setup-an-environment-for-machine-learning-and-deep-learning-with-anaconda-in-windows-5d7134a3db10
+) environment setup locally
 * [VIRAT dataset](https://viratdata.org/) 
 * [Annotation](https://mevadata.org/) 
 * [Object deteaction annotation](https://github.com/ahrnbom/ViratAnnotationObjectDetection) 
@@ -43,7 +54,7 @@ Thank you to my UCSD ML coursework mentor, Zuraiz Uddin for his support and guid
 * [Docker quickstart](https://github.com/ultralytics/yolov5/wiki/Docker-Quickstart)
  
 ## Citation for Virat dataset
-"A Large-scale Benchmark Dataset for Event Recognition in Surveillance Video" by Sangmin Oh, Anthony Hoogs, Amitha Perera, Naresh Cuntoor, Chia-Chih Chen, Jong Taek Lee, Saurajit Mukherjee, J.K. Aggarwal, Hyungtae Lee, Larry Davis, Eran Swears, Xiaoyang Wang, Qiang Ji, Kishore Reddy, Mubarak Shah, Carl Vondrick, Hamed Pirsiavash, Deva Ramanan, Jenny Yuen, Antonio Torralba, Bi Song, Anesco Fong, Amit Roy-Chowdhury, and Mita Desai, in Proceedings of IEEE Computer Vision and Pattern Recognition (CVPR), 2011.
+A Large-scale Benchmark Dataset for Event Recognition in Surveillance Video" by Sangmin Oh, Anthony Hoogs, Amitha Perera, Naresh Cuntoor, Chia-Chih Chen, Jong Taek Lee, Saurajit Mukherjee, J.K. Aggarwal, Hyungtae Lee, Larry Davis, Eran Swears, Xiaoyang Wang, Qiang Ji, Kishore Reddy, Mubarak Shah, Carl Vondrick, Hamed Pirsiavash, Deva Ramanan, Jenny Yuen, Antonio Torralba, Bi Song, Anesco Fong, Amit Roy-Chowdhury, and Mita Desai, in Proceedings of IEEE Computer Vision and Pattern Recognition (CVPR), 2011.
 
 Dataset used is available at [Viratdata dataset](https://viratdata.org/) Release version 2.0
 
